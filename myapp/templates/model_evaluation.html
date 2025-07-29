@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Evaluation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Model Evaluation</h1>
+        <h2>Best Model</h2>
+        <p> Among Linear Regression, Random Forest, K-Nearest Neighbors and Decision Tree </p>
+        <p>The best performing model based on Mean Squared Error (MSE) is: {{ best_model_name }} with error metrics of {{best_metrics}}</p>
+        <p>You can download the trained model file from the following link:</p>
+        <a href="{% url 'download_model' model_filename %}" class="btn btn-primary">
+            Download Trained Model
+        </a>
+    </div>
+</body>
+</html>

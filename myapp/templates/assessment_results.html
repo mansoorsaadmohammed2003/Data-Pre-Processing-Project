@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Quality Assessment Results</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Data Quality Assessment</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+ <br>
+    <div class="container mt-4">
+        <h1>Data Quality Assessment Results</h1>
+        <br>
+        <div class="row justify-content-around">
+            <div class="col-lg-3">
+                <h2>Missing Value Percentage: {{ assessment_results.missing_value_percentage }}%</h2>
+                <canvas id="missingChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-lg-3">
+                <h2>Outliers Percentage: {{ assessment_results.outliers_percentage }}%</h2>
+                <canvas id="outliersChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-lg-3">
+                <h2>Skew Percentage: {{ assessment_results.skew_percentage }}%</h2>
+                <canvas id="skewChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-lg-3">
+                <h2>Total Data Quality: {{ assessment_results.total_data_quality }}%</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h1>Cleaned Data (First Five Rows)</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% for col in cleaned_df_first_five_rows.columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in cleaned_df_first_five_rows.iterrows %}
+                <tr>
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <a href="{% url 'download_cleaned_data' %}" class="btn btn-primary">Download Cleaned Data</a>
+    </div>
+
+    <div class="container mt-5">
+        <h1>User Insights</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Features which are positively related with the target column</h2>
+                <p>High Correlation: {{ positive_high_correlation}}</p>
+            </div>
+            <div class="col-md-6">
+                <h2>Features which are negatively realted with the target column</h2>
+                <p>High Correlation: {{ negative_high_correlation }}</p>
+            </div>
+        </div>
+    
+        <div class="mt-4">
+            <h2>Feature Analysis</h2>
+            <div class="list-group">
+                {% for key, value in slope_dic.items %}
+                <div class="list-group-item list-group-item-action">
+                    <p class="mb-0">Unit increase in <strong>{{ key }}</strong> will increase the <strong>{{ target_variable }}</strong> by <strong>{{ value|floatformat:2 }}</strong> units.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- Add JavaScript code for dynamic charts -->
+    <script>
+        // Chart.js initialization
+        var missingChartCtx = document.getElementById('missingChart').getContext('2d');
+        var outliersChartCtx = document.getElementById('outliersChart').getContext('2d');
+        var skewChartCtx = document.getElementById('skewChart').getContext('2d');        
+        var missingChart = new Chart(missingChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Missing', 'Available'],
+                datasets: [{
+                    data: [{{ assessment_results.missing_value_percentage }}, {{ assessment_results.complementary_missing_value_percentage }}],
+                    backgroundColor: ['#FF6384', '#36A2EB']
+                }]
+            }
+        });
+        
+        var outliersChart = new Chart(outliersChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Outliers', 'Inliers'],
+                datasets: [{
+                    data: [{{ assessment_results.outliers_percentage }}, {{ assessment_results.complementary_outliers_percentage }}],
+                    backgroundColor: ['#FF6384', '#36A2EB']
+                }]
+            }
+        });
+        
+        var skewChart = new Chart(skewChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Skewed', 'Not Skewed'],
+                datasets: [{
+                    data: [{{ assessment_results.skew_percentage }}, {{ assessment_results.complementary_skew_percentage }}],
+                    backgroundColor: ['#FF6384', '#36A2EB']
+                }]
+            }
+        });
+    </script>
+    
+
+
+    <br>
+
+    <hr>
+    
+    <a href="{% url 'train_model' %}" class="btn btn-primary">Train Model</a>
+    
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Management Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .custom-file-upload:hover {
+            background-color: #e0e0e0;
+        }
+        .upload-btn {
+            display: block;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Management Tool</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="file-upload" class="custom-file-upload">
+                <input id="file-upload" type="file" name="csv_file"> Choose CSV File
+            </label>
+            <br><br>
+            <label for="target-variable">Target Variable:</label>
+            <input type="text" id="target-variable" name="target_variable" placeholder="Enter target variable name">
+            <br><br>
+            <input type="checkbox" id="drop-index" name="drop_index">
+            <label for="drop-index">Drop Index Variable if Exists</label>
+            <br><br>
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
