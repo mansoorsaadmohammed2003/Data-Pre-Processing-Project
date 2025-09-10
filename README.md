@@ -103,14 +103,4 @@ http://127.0.0.1:8000/
 	4.	Push to branch (git push origin feature-name).
 	5.	Open a Pull Request.
 
-⸻
 
-📜 License
-
-MIT License (or specify if different).
-
----
-
-⚡ On GitHub, this will automatically render as collapsible **sections with headings**, like Learnify’s README.  
-
-👉 Do you want me to also add a **Future Enhancements** section (like *“AI-based preprocessing, data visualization dashboard, cloud deployment”*) to match the style of your Learnify README?
